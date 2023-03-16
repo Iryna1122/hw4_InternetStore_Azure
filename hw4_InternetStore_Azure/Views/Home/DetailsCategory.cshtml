@@ -1,0 +1,39 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@model Category
+
+@if (Model != null)
+{
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>@Model.Id</td>
+                <td>@Model.CategoryName</td>
+                
+            </tr>
+
+        </tbody>
+
+
+    </table>
+}
+
+
+@foreach (var item in ViewBag.Prod)
+{
+    <p>item.ProductName</p>
+}

@@ -1,0 +1,121 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Product
+
+<h2>Add New Product</h2>
+<form method="post" action="AddProd">
+    <label for="Id"> Id:</label>
+    <input type="number" asp-for="@Model.Id" /><br />
+
+    <label for="name">Title:</label>
+    <input type="text" id="name" asp-for="@Model.ProductName"><br>
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" asp-for="@Model.Description"><br>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" asp-for="@Model.Price"><br>
+
+    @*<label for="categoryid">CategoryId:</label>
+    <input type="number" id="categoryid" asp-for="@Model.CategoryId"><br>*@
+
+    <p>
+        <label class="form-label">Category:</label>
+        <select class="form-control col-3" asp-for="CategoryId">
+
+            @foreach (Category item in ViewBag.Categories)
+            {
+                <option value="@item.Id">@item.CategoryName</option>
+            }
+
+        </select>
+    </p>
+
+    <button type="submit" class="btn btn-dark">Save product</button>
+</form>
+
+
+@*
+<h1>Products</h1>
+<table>
+    <tr><th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+    </tr>
+    @foreach (var product in ViewBag.products)
+    {
+        <tr><td>@product.Id</td>
+            <td>@product.ProductName</td>
+            <td>@product.Description</td>
+            <td>@product.Price</td>
+            <td>@product.CategoryId</td>
+            <form method="post" action="DeleteProducts">
+                <input type="hidden" value="@product.Id">
+                <button type="submit">Delete @product.Name</button>
+            </form>
+        </tr>
+    }
+</table>
+
+*@
+
+<center><h1>Products:</h1></center>
+
+
+    <table class="table table-success">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Category</th>
+                
+
+                <th>Details</th>
+                <th>Edit</th>
+                <th>Delete</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var prod in ViewBag.products)
+            {
+                <tr>
+                    <td>@prod.Id</td>
+                    <td>@prod.ProductName</td>
+                    <td>@prod.Description</td>
+                    <td>@prod.Price </td>
+                    <td>@prod.CategoryId </td>
+
+                    @* <td><img src="@((ViewBag.photos as List<Photo>).Where(o=>o.ProductId==prod.Id).First().Path)" class="w-50" /></td>*@
+
+                    <td>
+                        <form asp-action="DetailsProd" method="GET" asp-route-id="@prod.Id">
+                            <button class="btn btn-danger" type="submit">Info</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="EditProduct" method="GET" asp-route-id="@prod.Id">
+                            <button class="btn alert-success" type="submit">Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="DeleteProduct" method="POST" asp-route-id="@prod.Id">
+                            <button class="btn btn- alert-warning" type="submit">Delete</button>
+                        </form>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+
+    </table>
+

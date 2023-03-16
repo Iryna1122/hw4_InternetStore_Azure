@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@model Product
+
+<h1>Edit Product</h1>
+
+<form asp-controller="Home" method="POST" asp-action="EditProduct2"  asp-route-id="@Model.Id">
+    <p> <label class="form-label">Id:</label><input type="number" asp-for="@Model.Id" placeholder="Id" class="form-control" value="@Model.Id" /></p>
+    <p> <label class="form-label">Title:</label><input type="text" asp-for="@Model.ProductName" placeholder="Title" class="form-control" value="@Model.ProductName" /></p>
+
+
+    <p><label class="form-label">Description:</label><input type="text" asp-for="@Model.Description" placeholder="Description" class="form-control" value="@Model.Description" /> </p>
+   
+    <p> <label>Price:</label><input type="number" asp-for="Price" placeholder="Price" class="form-control" value="@Model.Price" /></p>
+    
+ @* <p> <label class="form-label">Price:</label><input type="number" asp-for="@Model.Price" placeholder="Price" class="form-control" value="@Model.Price" /></p>*@
+   
+    <p>
+        <label class="form-label">Category</label>
+        <select class="form-control col-3" asp-for="CategoryId">
+
+            @foreach (Category item in ViewBag.Categories)
+            {
+                <option value="@item.Id">@item.CategoryName</option>
+            }
+
+        </select>
+    </p>
+   <br />
+
+
+    <button type="submit" class="btn btn-primary">Edit Product</button>
+</form>
