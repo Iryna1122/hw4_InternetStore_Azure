@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage.Queue.Protocol;
+using Azure.Storage.Queues;
+using System.Text.Json;
 
 namespace hw4_InternetStore_Azure.Controllers
 {
@@ -10,11 +15,59 @@ namespace hw4_InternetStore_Azure.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+       // public static string connectionString = "DefaultEndpointsProtocol=https;AccountName=storagenewtoday;AccountKey=EsIIDEWtFs1cof9N51eavuB8bbGMx/7I6cbt+110RCJsoKHhuLwlSlP6DokDvuJ33nG2KOEPesnh+ASt/kFwBA==;EndpointSuffix=core.windows.net";
+        public static string connectionString = "DefaultEndpointsProtocol=https;AccountName=storageweb20oliinyk;AccountKey=YGDJPKbkgusKEgrCEJ/UbW9m+w/+p+HhKZgGVmySz/N6rYnKY1/M3su4XNS/6jyzQr8Di9mPDNYh+AStECC96A==;EndpointSuffix=core.windows.net";
+        public static string queuename = "myhomework";
+
+        QueueServiceClient queueService;
+
+        QueueClient queueClient;
+
+        List<QueueMessage> messages = new List<QueueMessage>();
+
+        public HomeController()
         {
-            _logger = logger;
+          
         }
 
+        [HttpPost]
+        public async Task<IActionResult> BuyProduct(int id)
+        {
+            string message;
+            string path = "myFile.txt";
+
+           queueService = new QueueServiceClient(connectionString);
+            try
+            {
+                queueClient = queueService.CreateQueue(queuename);
+            }
+            catch (Exception)
+            {
+
+                queueClient = queueService.GetQueueClient(queuename);
+            }
+            using (var db = new AppContextt())
+            {
+
+                Product prod = await db.Products.FindAsync(id);
+                string json = JsonSerializer.Serialize(prod);
+                message = json;
+            }
+
+            using(StreamWriter sw = new StreamWriter(path,true))
+            {
+                sw.WriteLine(message + "bought");
+            }
+               
+            queueClient = queueService.GetQueueClient(queuename);
+            await queueClient.SendMessageAsync(message, timeToLive: TimeSpan.FromDays(5));
+
+
+
+
+            return RedirectToAction("Products");
+
+        }
 
         public async Task<IActionResult> Products()
         {

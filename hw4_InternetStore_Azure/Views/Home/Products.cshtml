@@ -80,6 +80,7 @@
                 <th>Details</th>
                 <th>Edit</th>
                 <th>Delete</th>
+                <th>BUY</th>
 
             </tr>
         </thead>
@@ -108,9 +109,14 @@
                     </td>
                     <td>
                         <form asp-action="DeleteProduct" method="POST" asp-route-id="@prod.Id">
-                            <button class="btn btn- alert-warning" type="submit">Delete</button>
+                            <button class="btn btn-alert-warning" type="submit">Delete</button>
                         </form>
                     </td>
+                <td>
+                    <form asp-action="BuyProduct" method="POST" asp-route-id="@prod.Id">
+                        <button class="btn btn-outline-primary" type="submit">BUY</button>
+                    </form>
+                </td>
 
                 </tr>
             }
